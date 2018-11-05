@@ -1,42 +1,31 @@
 <ion-header>
 
-  <ion-navbar>
-   
-  </ion-navbar>
+  <ion-title>Teste</ion-title>
 
 </ion-header>
 
 
 <ion-content padding>
 
+    <div>
+      <button ion-button icon-start block color="light" tappable (click)="cadastro()">
+        <ion-icon name="log-in"></ion-icon>
+        Cadastre-se
+      </button>
+    </div>
+
   <div>
-    <button ion-button icon-start block color="dark" tappable (click)="login()">
+    <button ion-button icon-start block color="default" tappable (click)="login()">
       <ion-icon name="log-in"></ion-icon>
       Entre
     </button>
-
-    <p text-center ion-text color="secondary">Ou entre com:</p>
-
-    <ion-grid>
-      <ion-row>
-        <ion-col col-4>
-          <button ion-button icon-only block class="btn-facebook">
-            <ion-icon name="logo-facebook"></ion-icon>
-          </button>
-        </ion-col>
-        <ion-col col-4>
-          <button ion-button icon-only block class="btn-twitter">
-            <ion-icon name="logo-twitter"></ion-icon>
-          </button>
-        </ion-col>
-        <ion-col col-4>
-          <button ion-button icon-only block class="btn-gplus">
-            <ion-icon name="logo-googleplus"></ion-icon>
-          </button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
   </div>
+
+  <ion-list *ngFor="let usuario of usuarios">
+    <ion-item> {{usuario.nome}} - {{usuario.email}} 
+      <button ion-button color="danger" (click)="deletar(usuario.id)">Apagar</button>
+    </ion-item>
+    
+  </ion-list>
 
 </ion-content>
