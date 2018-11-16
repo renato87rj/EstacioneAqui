@@ -41,4 +41,8 @@ export class PrincipalPage {
     this.usuarioService.deletar(id).subscribe(response => this.getUsuarios());    
   }
 
+  public editar(usuario){
+    this.navCtrl.push(CadastroPage, {usuario:usuario});
+  }
+
 }

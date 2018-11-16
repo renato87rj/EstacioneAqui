@@ -13,6 +13,9 @@ export class UsuarioProvider {
 
   public urlUsuario = "http://localhost:8000/usuario";
 
+  public urlCadastro = "http://localhost:8000/api/register";
+  public urlLogin = "http://localhost:8000/api/login";
+
   constructor(public http: HttpClient) {
     
   }
@@ -22,11 +25,20 @@ export class UsuarioProvider {
   }
 
   public salvar(usuario):Observable<any>{
-    return this.http.post(this.urlUsuario, usuario);
+    return this.http.post(this.urlCadastro, usuario);
   }
 
   public deletar(id):Observable<any>{
     return this.http.delete(this.urlUsuario + "/" + id);    
+  }
+
+  public editar(usuario):Observable<any>{
+    return this.http.put(this.urlUsuario + "/" + usuario.id, usuario);
+  }
+
+  public login(usuario):Observable<any>{
+    return this.http.post(this.urlLogin, usuario);
+
   }
 
 }

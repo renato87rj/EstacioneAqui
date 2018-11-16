@@ -8,13 +8,13 @@
 
 
 <ion-content padding>
-  <form class="list-form">
+  <form class="list-form" (ngSubmit)="login()" >
     <ion-item>
       <ion-label floating>
         <ion-icon name="mail" item-start class="text-primary"></ion-icon>
         Email
       </ion-label>
-      <ion-input type="email"></ion-input>
+      <ion-input type="email" name="email" [(ngModel)]="dadosLogin.email"></ion-input>
     </ion-item>
 
     <ion-item>
@@ -22,8 +22,9 @@
         <ion-icon name="lock" item-start class="text-primary"></ion-icon>
         Senha
       </ion-label>
-      <ion-input type="password"></ion-input>
+      <ion-input type="password" name="senha" [(ngModel)]="dadosLogin.senha"></ion-input>
     </ion-item>
+    <button ion-button type="submit" block>Entrar</button>
   </form>
 
   <p text-right ion-text color="secondary" tappable (click)="forgotPass()"><strong>Esqueceu a Senha?</strong></p>

@@ -69,7 +69,7 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        User::find($id)->update($request->all());
     }
 
     /**

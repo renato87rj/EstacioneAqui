@@ -16,4 +16,5 @@ Route::get('/', function () {
 });
 Route::get('usuario', 'UsuarioController@index')->name('usuario');
 Route::post('usuario', 'UsuarioController@store')->name('usuario');
+Route::put('usuario/{id}', 'UsuarioController@store')->name('usuario');
 Route::delete('usuario/{id}', 'UsuarioController@destroy')->name('usuario');
