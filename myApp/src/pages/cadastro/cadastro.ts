@@ -1,3 +1,4 @@
+import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { UsuarioProvider } from '../../providers/usuario/usuario';
@@ -19,33 +20,34 @@ import { PrincipalPage } from '../principal/principal';
 })
 export class CadastroPage {  
 
-  public usuarioCadastro = {"nome": "", "email": "", "senha": ""};
-  public mensagem = [];
+  public usuarioCadastro = {"name": "", "email": "", "password": "", "password_confirmation":""};
+  public mensagem: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private usuarioService: UsuarioProvider, public alertCtrl: AlertController) {
-     
-    // this.usuarioCadastro = navParams.get('usuario');
-    // console.log(this.usuarioCadastro.id);
+         
   }  
 
   public cadastrarUsuario(){
     
-    this.usuarioService.salvar(this.usuarioCadastro).subscribe(response => console.log(response.status));
-    //this.showAlert(this.mensagem);
-    
+    this.usuarioService.salvar(this.usuarioCadastro)
+    .subscribe(
+      response => {
+        this.showAlert('Sucesso!', 'Cadastro realizado com sucesso');
+        this.navCtrl.setRoot(HomePage);
+      },
+      erro => {
+        let erros = JSON.stringify(erro.error.errors);
+        this.showAlert('Erro', erros);
+      });
   }
 
-  public retornaPrincipal(){
-    this.navCtrl.push(PrincipalPage);
-  }
-
-  showAlert(mensagem) {
-    const alert = this.alertCtrl.create({
-      title: 'Erro',
-      subTitle: mensagem.error,
+  showAlert(title, mensagem) {
+    this.alertCtrl.create({
+      title: title,
+      subTitle: mensagem,
       buttons: ['OK']
-    });
-    alert.present();
+    }).present();
+    
   }
 
 }

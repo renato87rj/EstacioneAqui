@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>    
-    <ion-title>Entre</ion-title>
+    <ion-title>Faça Login</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -22,12 +22,12 @@
         <ion-icon name="lock" item-start class="text-primary"></ion-icon>
         Senha
       </ion-label>
-      <ion-input type="password" name="senha" [(ngModel)]="dadosLogin.senha"></ion-input>
+      <ion-input type="password" name="password" [(ngModel)]="dadosLogin.password"></ion-input>
     </ion-item>
     <button ion-button type="submit" block>Entrar</button>
   </form>
 
-  <p text-right ion-text color="secondary" tappable (click)="forgotPass()"><strong>Esqueceu a Senha?</strong></p>
+  <!-- <p text-right ion-text color="secondary" tappable (click)="forgotPass()"><strong>Esqueceu a Senha?</strong></p> -->
 
   
 </ion-content>

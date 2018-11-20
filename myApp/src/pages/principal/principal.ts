@@ -20,9 +20,8 @@ export class PrincipalPage {
 
   public usuarios = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private usuarioService: UsuarioProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
 
-    this.getUsuarios();
   }
 
   login() {
@@ -33,16 +32,5 @@ export class PrincipalPage {
     this.navCtrl.push(CadastroPage);
   }
 
-  public getUsuarios(){
-    this.usuarioService.mostrar().subscribe(response => this.usuarios = response);
-  }
-
-  public deletar(id){
-    this.usuarioService.deletar(id).subscribe(response => this.getUsuarios());    
-  }
-
-  public editar(usuario){
-    this.navCtrl.push(CadastroPage, {usuario:usuario});
-  }
-
+  
 }

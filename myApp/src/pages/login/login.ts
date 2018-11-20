@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { PrincipalPage } from "../principal/principal";
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { UsuarioProvider } from '../../providers/usuario/usuario';
 import { HomePage } from '../home/home';
 
@@ -18,20 +17,31 @@ import { HomePage } from '../home/home';
 })
 export class LoginPage {
 
-  public dadosLogin = {"email": "", "senha": ""};
+  public dadosLogin = {"email": "", "password": ""};
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private usuarioService: UsuarioProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private usuarioService: UsuarioProvider, public alertCtrl: AlertController) {
   }
 
   public login()
   {
-    this.usuarioService.login(this.dadosLogin).subscribe(response => this.getHome());
-    console.log(this.dadosLogin);
+    this.usuarioService.login(this.dadosLogin)
+    .subscribe(
+      response => {
+        // this.showAlert('Cadastro realizado com sucesso');
+        this.navCtrl.setRoot(HomePage);
+      },
+      error => {
+        this.showAlert('Erro', 'Dados inválidos');
+      });
   }
-  
-  public getHome(){
-    this.navCtrl.push(HomePage);
-  }
+      showAlert(title, mensagem) {
+        this.alertCtrl.create({
+          title: title,
+          subTitle: mensagem,
+          buttons: ['OK']
+        }).present();
+        
+      }
 
 
 
