@@ -27,7 +27,8 @@ export class LoginPage {
     this.usuarioService.login(this.dadosLogin)
     .subscribe(
       response => {
-        // this.showAlert('Cadastro realizado com sucesso');
+        let nome = JSON.stringify(response.usuario);
+        this.showAlert('', 'Seja bemvindo'+nome+'!');
         this.navCtrl.setRoot(HomePage);
       },
       error => {

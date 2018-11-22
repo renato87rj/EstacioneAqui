@@ -28,18 +28,60 @@ export class GoogleMapComponent {
   
   initMap(){
 
+    
+     
+
     this.geolocation.getCurrentPosition()
     .then((resp) => {
       let coords = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
       let mapOptions: google.maps.MapOptions = {
-        zoom: 18,
+        zoom: 16,
         center: coords,
-        mapTypeId: google.maps.MapTypeId.TERRAIN
+        disableDefaultUI: true,
+        styles:  [
+          {
+            "featureType": "administrative",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          },
+          {
+            "featureType": "poi",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          },
+          {
+            "featureType": "road",
+            "elementType": "labels.icon",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          },
+          {
+            "featureType": "transit",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          }
+        ]
+        
       }
       this.map = new google.maps.Map(this.mapEelement.nativeElement, mapOptions);
       let marker = new google.maps.Marker({
       position:coords, 
-      map: this.map
+      map: this.map,
+      icon: 'assets/imgs/m1.png',
+      animation: google.maps.Animation.DROP
     });
      })
      .catch((error) => {

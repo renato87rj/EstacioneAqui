@@ -101,15 +101,16 @@ class UsuarioController extends Controller
         // $token->save();
         
         return response()->json([
-            'message' => 'Sucesso', 200
+            'message' => 'Sucesso',
+            'usuario' => Auth::user()->name
         ]);
     }
 
     public function logout(Request $request)
     {
-        $request->user()->token()->revoke();
-        return response()->json([
-            'message' => 'Successfully logged out'
-        ]);
+        // $request->user()->token()->revoke();
+        // return response()->json([
+        //     'message' => 'Successfully logged out'
+        // ]);
     }
 }

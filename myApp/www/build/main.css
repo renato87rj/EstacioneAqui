@@ -25676,6 +25676,7 @@ ion-navbar.toolbar {
 
 google-map #map {
   height: 100% !important;
+  width: 100% !important;
 }
 
 page-cadastro .fundo {
