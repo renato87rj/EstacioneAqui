@@ -1,3 +1,4 @@
+import { EstacionamentoPage } from './../estacionamento/estacionamento';
 import { LoginPage } from './../login/login';
 import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
@@ -58,7 +59,7 @@ export class CadastroPage {
         {
           text: 'Sim',
           handler: () => {
-            console.log('Disagree clicked');
+            this.navCtrl.push(EstacionamentoPage);
           }
         },
         {

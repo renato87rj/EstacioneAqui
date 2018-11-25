@@ -12,27 +12,27 @@
     <form class="list-form" (ngSubmit)="cadastraEstacionamento()">
         <ion-item>     
           <ion-label stacked>Nome</ion-label>     
-          <ion-input type="text" [(ngModel)]="usuarioCadastro.name" name="nome" ></ion-input>
+          <ion-input type="text" [(ngModel)]="parking.name" name="nome" ></ion-input>
         </ion-item>
         <ion-item>
           <ion-label stacked>Telefone</ion-label>
-          <ion-input type="text" [(ngModel)]="usuarioCadastro.email" name="telefone" ></ion-input>
+          <ion-input type="text" [(ngModel)]="parking.email" name="telefone" ></ion-input>
         </ion-item>
         <ion-item>
           <ion-label stacked>Endereço</ion-label>
-          <ion-input type="text" [(ngModel)]="usuarioCadastro.password" name="endereco" ></ion-input>
+          <ion-input type="text" [(ngModel)]="parking.password" name="endereco" ></ion-input>
         </ion-item>
         <ion-item>
             <ion-label stacked>Bairro</ion-label>
-            <ion-input type="text" [(ngModel)]="usuarioCadastro.password_confirmation" name="bairro" ></ion-input>
+            <ion-input type="text" [(ngModel)]="parking.password_confirmation" name="bairro" ></ion-input>
           </ion-item>
           <ion-item>
               <ion-label stacked>Cidade</ion-label>
-              <ion-input type="text" [(ngModel)]="usuarioCadastro.password_confirmation" name="bairro" ></ion-input>
+              <ion-input type="text" [(ngModel)]="parking.password_confirmation" name="bairro" ></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label stacked>Estado</ion-label>
-                <ion-input type="text" [(ngModel)]="usuarioCadastro.password_confirmation" name="bairro" ></ion-input>
+                <ion-input type="text" [(ngModel)]="parking.password_confirmation" name="bairro" ></ion-input>
               </ion-item>
 
         <button ion-button type="submit" block>Cadastrar</button>
