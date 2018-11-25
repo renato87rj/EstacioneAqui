@@ -25674,19 +25674,77 @@ ion-navbar.toolbar {
   min-height: calc(46px + env(safe-area-inset-bottom));
 }
 
+.logo {
+  width: 80px;
+  height: 80px;
+  margin: 20px auto 0;
+  border-radius: 10%;
+  background-size: 100%;
+}
+
+.text-primary {
+  color: #488aff;
+}
+
+.auth-page {
+  background-color: #fff;
+}
+
+.auth-page::after {
+  content: "";
+  background: url("../assets/imgs/mapa2.png") no-repeat;
+  background-size: cover;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: 0;
+  -webkit-filter: blur(1px);
+  filter: blur(1px);
+}
+
+.list-form {
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.list-form ion-item {
+  background: none;
+  padding: 0;
+}
+
+.list-form ion-item:first-child {
+  border-top: none;
+}
+
+.list-form ion-item:after {
+  display: none;
+}
+
+.list-form ion-item ion-label {
+  font-size: 1em;
+  color: #222;
+}
+
 google-map #map {
   height: 100% !important;
-  width: 100% !important;
 }
 
-page-cadastro .fundo {
-  background-color: #56CA96;
+page-home ion-header .toolbar {
+  position: absolute;
 }
 
-page-login .fundo {
-  background-color: #56CA96;
+page-home ion-header .toolbar .toolbar-background {
+  background: transparent;
 }
 
-page-principal .fundo {
-  background-color: #56CA96;
+page-home ion-header .toolbar .toolbar-title {
+  color: black;
+}
+
+page-home html, page-home body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }

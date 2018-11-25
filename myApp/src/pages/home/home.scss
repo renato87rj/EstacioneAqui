@@ -1,3 +1,20 @@
 page-home {
+    ion-header {
+        .toolbar {
+          position: absolute;
+      
+          .toolbar-background {
+            background: transparent;
+          }
+          .toolbar-title {
+            color: black;
+          }
+        }
+      }
 
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
 }

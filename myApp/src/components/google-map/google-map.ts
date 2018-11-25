@@ -80,7 +80,7 @@ export class GoogleMapComponent {
       let marker = new google.maps.Marker({
       position:coords, 
       map: this.map,
-      icon: 'assets/imgs/m1.png',
+      icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
       animation: google.maps.Animation.DROP
     });
      })

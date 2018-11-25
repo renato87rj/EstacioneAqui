@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, MenuController, ToastController} from 'ionic-angular';
 import { UsuarioProvider } from '../../providers/usuario/usuario';
 import { HomePage } from '../home/home';
+import { CadastroPage } from '../cadastro/cadastro';
 
 /**
  * Generated class for the LoginPage page.
@@ -19,7 +20,8 @@ export class LoginPage {
 
   public dadosLogin = {"email": "", "password": ""};
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private usuarioService: UsuarioProvider, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private usuarioService: UsuarioProvider, public alertCtrl: AlertController, public menu: MenuController, public toastCtrl: ToastController) {
+    this.menu.swipeEnable(false);
   }
 
   public login()
@@ -28,11 +30,11 @@ export class LoginPage {
     .subscribe(
       response => {
         let nome = JSON.stringify(response.usuario);
-        this.showAlert('', 'Seja bemvindo'+nome+'!');
+        this.presentToast("Seja bem vindo"+ nome +"!"); 
         this.navCtrl.setRoot(HomePage);
       },
       error => {
-        this.showAlert('Erro', 'Dados inválidos');
+        this.showAlert('Erro', JSON.stringify(error.message));
       });
   }
       showAlert(title, mensagem) {
@@ -42,6 +44,18 @@ export class LoginPage {
           buttons: ['OK']
         }).present();
         
+      }
+
+      cadastro() {
+        this.navCtrl.push(CadastroPage);
+      }
+
+      presentToast(mensagem) {
+        const toast = this.toastCtrl.create({
+          message: mensagem,
+          duration: 3000
+        });
+        toast.present();
       }
 
 

@@ -1,8 +1,9 @@
+import { LoginPage } from './../login/login';
 import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ToastController} from 'ionic-angular';
 import { UsuarioProvider } from '../../providers/usuario/usuario';
-import { PrincipalPage } from '../principal/principal';
+
 
 
 /**
@@ -23,7 +24,7 @@ export class CadastroPage {
   public usuarioCadastro = {"name": "", "email": "", "password": "", "password_confirmation":""};
   public mensagem: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private usuarioService: UsuarioProvider, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private usuarioService: UsuarioProvider, public alertCtrl: AlertController, public toastCtrl: ToastController) {
          
   }  
 
@@ -32,8 +33,7 @@ export class CadastroPage {
     this.usuarioService.salvar(this.usuarioCadastro)
     .subscribe(
       response => {
-        this.showAlert('Sucesso!', 'Cadastro realizado com sucesso');
-        this.navCtrl.setRoot(HomePage);
+        this.showConfirm();        
       },
       erro => {
         let erros = JSON.stringify(erro.error.errors);
@@ -48,6 +48,37 @@ export class CadastroPage {
       buttons: ['OK']
     }).present();
     
+  }
+
+  showConfirm() {
+    const confirm = this.alertCtrl.create({
+      title: 'Você administra um estacionamento?',
+      message: 'Se você é um administrador de estacionamento o cadastre também, para que as pessoas possam ve-lo no mapa.',
+      buttons: [
+        {
+          text: 'Sim',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Não',
+          handler: () => {
+            this.presentToast();
+            this.navCtrl.setRoot(LoginPage);
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
+  presentToast() {
+    const toast = this.toastCtrl.create({
+      message: 'Cadastro realizado. Faça seu Login.',
+      duration: 3000
+    });
+    toast.present();
   }
 
 }

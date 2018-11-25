@@ -23,10 +23,8 @@ class CreateEstacionamentosTable extends Migration
             $table->string('bairro');
             $table->string('estado');
             $table->string('cidade');
-            $table->string('data_ent')->nullable();
-            $table->string('hora_ent')->nullable();
-            $table->string('data_saida')->nullable();
-            $table->string('hora_saida')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();            
             $table->integer('vaga')->default(0);
             $table->timestamps();
         });

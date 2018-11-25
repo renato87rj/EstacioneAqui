@@ -9,23 +9,23 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import {LoginPage} from "../pages/login/login";
-import {PrincipalPage} from "../pages/principal/principal";
 import {CadastroPage} from "../pages/cadastro/cadastro";
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { UsuarioProvider } from '../providers/usuario/usuario';
 import { Geolocation } from '@ionic-native/geolocation';
+import { EstacionamentoPage } from '../pages/estacionamento/estacionamento';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     ListPage, 
-    LoginPage,
-    PrincipalPage,
+    LoginPage,    
     CadastroPage,
     GoogleMapComponent,
+    EstacionamentoPage,
   ],
   imports: [
     BrowserModule,
@@ -38,10 +38,10 @@ import { Geolocation } from '@ionic-native/geolocation';
     MyApp,
     HomePage,
     ListPage,
-    LoginPage,
-    PrincipalPage,
+    LoginPage,    
     CadastroPage,
     GoogleMapComponent,
+    EstacionamentoPage,
   ],
   providers: [
     StatusBar,

@@ -1,14 +1,15 @@
-<ion-header>
 
-  <ion-navbar>    
-    <ion-title>Faça Login</ion-title>
-  </ion-navbar>
+<ion-content padding class="auth-page">    
 
-</ion-header>
+        <!-- Logo -->
+        <div padding-horizontal text-center class="animated fadeInDown">            
+          <img class="logo" src="assets/imgs/carro5.png">            
+          <h2 ion-text class="text-primary">
+            <strong>Estacione</strong> Aqui
+          </h2>
+        </div>
 
-
-<ion-content padding class="fundo">
-  <form class="list-form" (ngSubmit)="login()" >
+  <form class="list-form" (ngSubmit)="login()" id="formlogin">    
     <ion-item>
       <ion-label floating>
         <ion-icon name="mail" item-start class="text-primary"></ion-icon>
@@ -23,11 +24,15 @@
         Senha
       </ion-label>
       <ion-input type="password" name="password" [(ngModel)]="dadosLogin.password"></ion-input>
-    </ion-item>
-    <button ion-button type="submit" block>Entrar</button>
+    </ion-item>  
   </form>
 
-  <!-- <p text-right ion-text color="secondary" tappable (click)="forgotPass()"><strong>Esqueceu a Senha?</strong></p> -->
+  <!-- <p text-right ion-text style="color:#2a76cc" tappable (click)="forgotPass()"><strong>Esqueceu a Senha?</strong></p> -->
 
-  
+  <button ion-button type="submit" block form="formlogin"><ion-icon name="log-in"></ion-icon> Entrar</button>  
+
+  <div text-center margin-top>
+    <span ion-text color="primary" tappable (click)="cadastro()">Ou <strong>Cadastre-se aqui</strong></span>
+  </div>
+
 </ion-content>
