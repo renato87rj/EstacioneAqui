@@ -1,6 +1,6 @@
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="primary">
     
   </ion-navbar>
 
@@ -12,7 +12,7 @@
     <form class="list-form" (ngSubmit)="cadastrarUsuario()">
         <ion-item>     
           <ion-label stacked>Nome</ion-label>     
-          <ion-input type="text" [(ngModel)]="usuarioCadastro.name" name="name" ></ion-input>
+          <ion-input type="text" [(ngModel)]="usuarioCadastro.nome" name="name" ></ion-input>
         </ion-item>
         <ion-item>
           <ion-label stacked>E-mail</ion-label>
@@ -20,12 +20,8 @@
         </ion-item>
         <ion-item>
           <ion-label stacked>Senha</ion-label>
-          <ion-input type="password" [(ngModel)]="usuarioCadastro.password" name="password" ></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label stacked>Confirme a Senha</ion-label>
-            <ion-input type="password" [(ngModel)]="usuarioCadastro.password_confirmation" name="password_confirmation" ></ion-input>
-          </ion-item>
+          <ion-input type="password" [(ngModel)]="usuarioCadastro.senha" name="password" ></ion-input>
+        </ion-item>                
         <button ion-button type="submit" block>Cadastrar</button>
       </form>      
       

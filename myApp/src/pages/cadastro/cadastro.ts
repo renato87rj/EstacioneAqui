@@ -22,7 +22,8 @@ import { UsuarioProvider } from '../../providers/usuario/usuario';
 })
 export class CadastroPage {  
 
-  public usuarioCadastro = {"name": "", "email": "", "password": "", "password_confirmation":""};
+  // public usuarioCadastro = {"name": "", "email": "", "password": "", "password_confirmation":""};
+  public usuarioCadastro = {"nome": "", "email": "", "senha": "", "adm_estaciona": 0};
   public mensagem: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private usuarioService: UsuarioProvider, public alertCtrl: AlertController, public toastCtrl: ToastController) {
@@ -30,16 +31,16 @@ export class CadastroPage {
   }  
 
   public cadastrarUsuario(){
-    
+    console.log(this.usuarioCadastro);
     this.usuarioService.salvar(this.usuarioCadastro)
-    .subscribe(
-      response => {
-        this.showConfirm();        
-      },
-      erro => {
-        let erros = JSON.stringify(erro.error.errors);
-        this.showAlert('Erro', erros);
-      });
+    .then(() => {
+      this.presentToast();
+      this.navCtrl.setRoot(LoginPage);
+    })
+    .catch((erro) => {
+      
+      this.showAlert('Erro', erro);
+    })
   }
 
   showAlert(title, mensagem) {
@@ -65,8 +66,7 @@ export class CadastroPage {
         {
           text: 'Não',
           handler: () => {
-            this.presentToast();
-            this.navCtrl.setRoot(LoginPage);
+            
           }
         }
       ]

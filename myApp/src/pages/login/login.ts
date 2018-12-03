@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, MenuController, ToastController} from 'ionic-angular';
 import { UsuarioProvider } from '../../providers/usuario/usuario';
 import { HomePage } from '../home/home';
 import { CadastroPage } from '../cadastro/cadastro';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 /**
  * Generated class for the LoginPage page.
@@ -18,24 +19,43 @@ import { CadastroPage } from '../cadastro/cadastro';
 })
 export class LoginPage {
 
-  public dadosLogin = {"email": "", "password": ""};
+  // public dadosLogin = {"email": "", "password": ""};
+  @ViewChild('email') email;
+  @ViewChild('senha') senha;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private usuarioService: UsuarioProvider, public alertCtrl: AlertController, public menu: MenuController, public toastCtrl: ToastController) {
+  nome: any;
+
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams, 
+    private usuarioService: UsuarioProvider, 
+    public alertCtrl: AlertController, 
+    public menu: MenuController, 
+    public toastCtrl: ToastController,
+    private fireauth: AngularFireAuth) {
+
     this.menu.swipeEnable(false);
+
+    this.fireauth.authState.subscribe(user => {
+      if (!user) {
+        this.nome = null;        
+        return;
+      }
+      this.nome = user.displayName;   
+      
+    })
   }
 
   public login()
   {
-    this.usuarioService.login(this.dadosLogin)
-    .subscribe(
-      response => {
-        let nome = JSON.stringify(response.usuario);
-        this.presentToast("Seja bem vindo"+ nome +"!"); 
+    this.usuarioService.login(this.email.value, this.senha.value)
+    .then(() => {        
+        this.presentToast("Seja bem vindo " + this.nome + "!");
         this.navCtrl.setRoot(HomePage);
-      },
-      error => {
-        this.showAlert('Erro', JSON.stringify(error.message));
-      });
+      })
+    .catch((erro) => {
+        this.showAlert('Erro', erro.message);
+      })
   }
       showAlert(title, mensagem) {
         this.alertCtrl.create({

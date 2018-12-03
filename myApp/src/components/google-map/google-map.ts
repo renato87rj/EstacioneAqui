@@ -22,14 +22,11 @@ export class GoogleMapComponent {
     
   }
 
-  ngOnInit(){  
+  public ngOnInit(){  
     this.initMap();
   }
   
-  initMap(){
-
-    
-     
+  public initMap(){
 
     this.geolocation.getCurrentPosition()
     .then((resp) => {
