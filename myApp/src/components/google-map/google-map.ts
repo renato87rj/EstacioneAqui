@@ -1,3 +1,4 @@
+import { AngularFireDatabase, AngularFireDatabaseModule } from '@angular/fire/database';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Component, ViewChild } from '@angular/core';
 
@@ -18,7 +19,7 @@ export class GoogleMapComponent {
   @ViewChild("map") mapEelement;
   public map: any;
 
-  constructor(private geolocation: Geolocation) {
+  constructor(private geolocation: Geolocation, public firedb: AngularFireDatabase) {
     
   }
 
@@ -80,17 +81,25 @@ export class GoogleMapComponent {
       icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
       animation: google.maps.Animation.DROP
     });
+    var map = this.map;
+    var pontos = this.firedb.database.ref('estacionamentos/');
+    pontos.on('value', function(snapshot){
+      snapshot.forEach(function(childSnapshot){    
+        
+        var latlng = new google.maps.LatLng(childSnapshot.val().lat, childSnapshot.val().lng);        
+        let marker = new google.maps.Marker({
+          position:latlng, 
+          map: map,
+          icon: childSnapshot.val().vaga == 0 ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+        })
+      })      
+    })
      })
      .catch((error) => {
        console.log('Não deu pra te achar.', error);
      });
 
-    //  let watch = this.geolocation.watchPosition();
-    //   watch.subscribe((data) => {
-    //   data can be a set of coordinates, or an error (if an error occurred).
-    //   data.coords.latitude
-    //   data.coords.longitude
-    //   });
+    
 
   }
 

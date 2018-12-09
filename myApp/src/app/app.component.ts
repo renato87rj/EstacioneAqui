@@ -13,7 +13,7 @@ import { UsuarioProvider } from '../providers/usuario/usuario';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
  
-  rootPage: any = LoginPage;
+  rootPage: any = HomePage;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public usuarioservice: UsuarioProvider) {
     this.initializeApp();

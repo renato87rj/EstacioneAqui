@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { HomePage } from './../home/home';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { ParkingProvider } from '../../providers/parking/parking';
 
 /**
@@ -16,20 +17,28 @@ import { ParkingProvider } from '../../providers/parking/parking';
 })
 export class EstacionamentoPage {
 
-  public parking = {"nome": "", "telefone": "", "endereco": "", "bairro":"", "cidade": "", "estado": ""};
+  public parking = {"nome": "", "endereco": "", "lat":"", "lng": "", "vaga": 0};
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private estaciona: ParkingProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private estacionaService: ParkingProvider, private toastCtrl: ToastController) {
   }
 
   
   cadastraEstacionamento(){
-    this.estaciona.cadastrar(this.parking)
+    this.estacionaService.cadastrar(this.parking)
     .then(() => {
-
-    })
-    .catch((erro) => {
-      
+      this.presentToast();
+      this.navCtrl.setRoot(HomePage);
     })
   }
+
+  presentToast() {
+    const toast = this.toastCtrl.create({
+      message: 'Cadastro realizado.',
+      duration: 3000
+    });
+    toast.present();
+  }
+
+
 
 }

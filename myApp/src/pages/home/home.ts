@@ -13,20 +13,6 @@ export class HomePage {
 
   }
 
-  ionViewDidLoad(){
-    // this.afAuth.authState.subscribe(data => {
-    //   if (data && data.email && data.uid) {
-    //     this.toast.create({
-    //       message: `Boas vindas ${data.email}`,
-    //       duration: 3000
-    //     }).present();
-    //   } else {
-    //     this.toast.create({
-    //       message: 'Não foi possível autenticar.',
-    //       duration: 3000
-    //     }).present();
-    //   }
-    // });
-  }  
+  
 
 }
