@@ -1,0 +1,17 @@
+page-admin-estac {
+    #map {
+        height: 100% !important;       
+    }
+    ion-header {
+        .toolbar {
+          position: absolute;
+      
+          .toolbar-background {
+            background: transparent;
+          }
+          .toolbar-title {
+            color: black;
+          }
+        }
+      }
+}

@@ -1,0 +1,19 @@
+<ion-header>
+
+  <ion-navbar>
+    
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <form id=formId (ngSubmit)="alterar()">
+    <ion-item>
+      <ion-label>Acabaram as vagas?</ion-label>
+      <ion-toggle checked="false" #lotado></ion-toggle>
+    </ion-item>
+    <button ion-button type="submit" color="primary">Salvar</button>
+    <button ion-button color="danger" (click)="dismiss()">Fechar</button>
+  </form>
+</ion-content>

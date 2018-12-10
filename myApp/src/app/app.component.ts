@@ -1,5 +1,8 @@
+import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { HomePage } from './../pages/home/home';
 import { EstacionamentoPage } from './../pages/estacionamento/estacionamento';
+import { AdminEstacPage } from './../pages/admin-estac/admin-estac';
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, NavController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -13,9 +16,9 @@ import { UsuarioProvider } from '../providers/usuario/usuario';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
  
-  rootPage: any = HomePage;
+  rootPage: any = LoginPage;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public usuarioservice: UsuarioProvider) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public usuarioservice: UsuarioProvider, public fireauth: AngularFireAuth, public firedb: AngularFireDatabase) {
     this.initializeApp();
   }
 
@@ -29,7 +32,24 @@ export class MyApp {
   }
 
   EstacionaPage() {
-    this.nav.setRoot(EstacionamentoPage);
+    var nav = this.nav;
+    var user = this.fireauth.auth.currentUser;
+
+    var ref = this.firedb.database.ref('estacionamentos/');
+    ref.orderByChild('usuario').equalTo(user.uid).on('value', function(snapshot){    
+      
+      if(snapshot.val() != null){
+        nav.setRoot(AdminEstacPage);        
+      }
+      else{
+        nav.setRoot(EstacionamentoPage);  
+      }
+      
+    })        
+    
+  }
+  AdminPage() {
+    this.nav.setRoot(AdminEstacPage);
   }
   HomePage() {
     this.nav.setRoot(HomePage);

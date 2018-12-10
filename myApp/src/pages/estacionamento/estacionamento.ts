@@ -1,3 +1,4 @@
+import { AdminEstacPage } from './../admin-estac/admin-estac';
 import { HomePage } from './../home/home';
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
@@ -27,7 +28,7 @@ export class EstacionamentoPage {
     this.estacionaService.cadastrar(this.parking)
     .then(() => {
       this.presentToast();
-      this.navCtrl.setRoot(HomePage);
+      this.navCtrl.setRoot(AdminEstacPage);
     })
   }
 

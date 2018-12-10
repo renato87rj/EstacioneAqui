@@ -1,3 +1,5 @@
+import { AdminVagaPage } from './../pages/admin-vaga/admin-vaga';
+import { AdminEstacPage } from './../pages/admin-estac/admin-estac';
 import { GoogleMapComponent } from '../components/google-map/google-map';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -30,6 +32,8 @@ import { ParkingProvider } from '../providers/parking/parking';
     CadastroPage,
     GoogleMapComponent,
     EstacionamentoPage,
+    AdminEstacPage,
+    AdminVagaPage
   ],
   imports: [
     BrowserModule,
@@ -56,6 +60,8 @@ import { ParkingProvider } from '../providers/parking/parking';
     CadastroPage,
     GoogleMapComponent,
     EstacionamentoPage,
+    AdminEstacPage,
+    AdminVagaPage
   ],
   providers: [
     StatusBar,
