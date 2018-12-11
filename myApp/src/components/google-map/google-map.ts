@@ -93,6 +93,13 @@ export class GoogleMapComponent {
           map: map,
           icon: childSnapshot.val().vaga == 0 ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
         })
+        var infowindow = new google.maps.InfoWindow({
+          content: childSnapshot.val().nome + '<br>' + childSnapshot.val().endereco
+        });
+        marker.addListener('click', function() {
+          infowindow.open(map, marker);
+          
+        });
       })      
     })
      })
@@ -100,7 +107,7 @@ export class GoogleMapComponent {
        console.log('Não deu pra te achar.', error);
      });
 
-    
+     
 
   }
 

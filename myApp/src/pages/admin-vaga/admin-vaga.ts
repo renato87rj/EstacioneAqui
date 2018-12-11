@@ -18,8 +18,18 @@ import { AngularFireAuth } from '@angular/fire/auth';
 export class AdminVagaPage {
 
   @ViewChild('lotado') lotado;
-
+  geocoder = new google.maps.Geocoder();
+  public nome: any;
+  public endereco: any;
+  public vaga: any;
+  public latlng = {lat:"", lng:""};
+  
   constructor(public navCtrl: NavController, public navParams: NavParams, public fireauth: AngularFireAuth, public firedb: AngularFireDatabase, public viewCtrl: ViewController, public toastCtrl: ToastController) {
+
+    this.nome = this.navParams.get('nome');
+    this.endereco = this.navParams.get('endereco'); 
+    this.navParams.get('vaga') == 0 ? this.vaga = 'false' : this.vaga = 'true';
+    console.log(this.vaga);
   }
 
   public alterar(){
@@ -48,5 +58,26 @@ export class AdminVagaPage {
       duration: 3000
     });
     toast.present();
+  }
+
+  editar(){
+    var e;
+    var latlng;
+    var fire = this.firedb;
+    var user = this.fireauth.auth.currentUser;    
+    var ref = this.firedb.database.ref('estacionamentos/');    
+    ref.orderByChild('usuario').equalTo(user.uid).on('child_added', function(snapshot){           
+      e = snapshot.key;           
+    })
+    this.firedb.database.ref('estacionamentos/'+e).update({nome:this.nome, endereco: this.endereco});    
+
+    this.geocoder.geocode({'address':this.endereco}, function(results, status){
+      if (status == google.maps.GeocoderStatus.OK) {
+        latlng = {lat:results[0].geometry.location.lat(), lng:results[0].geometry.location.lng()};
+        fire.database.ref('estacionamentos/'+e).update(latlng);
+      }      
+    })
+    
+    this.dismiss();
   }
 }

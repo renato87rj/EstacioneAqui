@@ -11,9 +11,25 @@
   <form id=formId (ngSubmit)="alterar()">
     <ion-item>
       <ion-label>Acabaram as vagas?</ion-label>
-      <ion-toggle checked="false" #lotado></ion-toggle>
+      <ion-toggle [checked]="vaga" #lotado></ion-toggle>
     </ion-item>
-    <button ion-button type="submit" color="primary">Salvar</button>
-    <button ion-button color="danger" (click)="dismiss()">Fechar</button>
-  </form>
+    <button ion-button type="submit" color="primary">Salvar</button>    
+  </form>  
+  <ion-item>
+    <label for="">Editar seu Estacionamento</label>
+  </ion-item>
+  <form class="list-form" (ngSubmit)="editar()">
+    <ion-item>     
+      <ion-label stacked>Nome</ion-label>     
+      <ion-input type="text" [(ngModel)]="nome" name="nome"></ion-input>
+    </ion-item>        
+    <ion-item>
+      <ion-label stacked>Endereço</ion-label>
+      <ion-input type="text" [(ngModel)]="endereco" name="endereco" ></ion-input>
+    </ion-item>
+    <button ion-button type="submit" block>Editar</button>  
+  </form>   
+
+  <button ion-button color="danger" (click)="dismiss()">Fechar</button>
+
 </ion-content>

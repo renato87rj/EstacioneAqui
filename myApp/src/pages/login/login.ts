@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, MenuController, ToastController} from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, MenuController, ToastController, LoadingController} from 'ionic-angular';
 import { UsuarioProvider } from '../../providers/usuario/usuario';
 import { HomePage } from '../home/home';
 import { CadastroPage } from '../cadastro/cadastro';
@@ -32,7 +32,8 @@ export class LoginPage {
     public alertCtrl: AlertController, 
     public menu: MenuController, 
     public toastCtrl: ToastController,
-    private fireauth: AngularFireAuth) {
+    private fireauth: AngularFireAuth, 
+    public loadingCtrl: LoadingController) {
 
     this.menu.swipeEnable(false);
 
@@ -48,8 +49,9 @@ export class LoginPage {
 
   public login()
   {
+    this.presentLoading();
     this.usuarioService.login(this.email.value, this.senha.value)
-    .then(() => {        
+    .then(() => {          
         this.presentToast("Seja bem vindo " + this.nome + "!");
         this.navCtrl.setRoot(HomePage);
       })
@@ -76,6 +78,14 @@ export class LoginPage {
           duration: 3000
         });
         toast.present();
+      }
+
+      presentLoading() {
+        const loader = this.loadingCtrl.create({
+          content: "Entrando...",          
+          dismissOnPageChange: true
+        });
+        loader.present();
       }
 
 

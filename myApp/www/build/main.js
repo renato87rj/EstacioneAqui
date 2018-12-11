@@ -29,7 +29,7 @@ var HomePage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-home',template:/*ion-inline-start:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>    \n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <google-map></google-map>  \n</ion-content>\n'/*ion-inline-end:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/home/home.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__providers_usuario_usuario__["a" /* UsuarioProvider */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__providers_usuario_usuario__["a" /* UsuarioProvider */]])
     ], HomePage);
     return HomePage;
 }());
@@ -74,6 +74,12 @@ var AdminVagaPage = /** @class */ (function () {
         this.firedb = firedb;
         this.viewCtrl = viewCtrl;
         this.toastCtrl = toastCtrl;
+        this.geocoder = new google.maps.Geocoder();
+        this.latlng = { lat: "", lng: "" };
+        this.nome = this.navParams.get('nome');
+        this.endereco = this.navParams.get('endereco');
+        this.navParams.get('vaga') == 0 ? this.vaga = 'false' : this.vaga = 'true';
+        console.log(this.vaga);
     }
     AdminVagaPage.prototype.alterar = function () {
         var lotado = this.lotado.value;
@@ -99,17 +105,36 @@ var AdminVagaPage = /** @class */ (function () {
         });
         toast.present();
     };
+    AdminVagaPage.prototype.editar = function () {
+        var e;
+        var latlng;
+        var fire = this.firedb;
+        var user = this.fireauth.auth.currentUser;
+        var ref = this.firedb.database.ref('estacionamentos/');
+        ref.orderByChild('usuario').equalTo(user.uid).on('child_added', function (snapshot) {
+            e = snapshot.key;
+        });
+        this.firedb.database.ref('estacionamentos/' + e).update({ nome: this.nome, endereco: this.endereco });
+        this.geocoder.geocode({ 'address': this.endereco }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                latlng = { lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng() };
+                fire.database.ref('estacionamentos/' + e).update(latlng);
+            }
+        });
+        this.dismiss();
+    };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_8" /* ViewChild */])('lotado'),
         __metadata("design:type", Object)
     ], AdminVagaPage.prototype, "lotado", void 0);
     AdminVagaPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-admin-vaga',template:/*ion-inline-start:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/admin-vaga/admin-vaga.html"*/'<ion-header>\n\n  <ion-navbar>\n    \n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <form id=formId (ngSubmit)="alterar()">\n    <ion-item>\n      <ion-label>Acabaram as vagas?</ion-label>\n      <ion-toggle checked="false" #lotado></ion-toggle>\n    </ion-item>\n    <button ion-button type="submit" color="primary">Salvar</button>\n    <button ion-button color="danger" (click)="dismiss()">Fechar</button>\n  </form>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/admin-vaga/admin-vaga.html"*/,
+            selector: 'page-admin-vaga',template:/*ion-inline-start:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/admin-vaga/admin-vaga.html"*/'<ion-header>\n\n  <ion-navbar>\n    \n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <form id=formId (ngSubmit)="alterar()">\n    <ion-item>\n      <ion-label>Acabaram as vagas?</ion-label>\n      <ion-toggle [checked]="vaga" #lotado></ion-toggle>\n    </ion-item>\n    <button ion-button type="submit" color="primary">Salvar</button>    \n  </form>  \n  <ion-item>\n    <label for="">Editar seu Estacionamento</label>\n  </ion-item>\n  <form class="list-form" (ngSubmit)="editar()">\n    <ion-item>     \n      <ion-label stacked>Nome</ion-label>     \n      <ion-input type="text" [(ngModel)]="nome" name="nome"></ion-input>\n    </ion-item>        \n    <ion-item>\n      <ion-label stacked>Endereço</ion-label>\n      <ion-input type="text" [(ngModel)]="endereco" name="endereco" ></ion-input>\n    </ion-item>\n    <button ion-button type="submit" block>Editar</button>  \n  </form>   \n\n  <button ion-button color="danger" (click)="dismiss()">Fechar</button>\n\n</ion-content>\n'/*ion-inline-end:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/admin-vaga/admin-vaga.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_3__angular_fire_auth__["a" /* AngularFireAuth */], __WEBPACK_IMPORTED_MODULE_2__angular_fire_database__["a" /* AngularFireDatabase */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ViewController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* ToastController */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__angular_fire_auth__["a" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_fire_auth__["a" /* AngularFireAuth */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__angular_fire_database__["a" /* AngularFireDatabase */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_fire_database__["a" /* AngularFireDatabase */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["n" /* ViewController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["n" /* ViewController */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ToastController */]) === "function" && _f || Object])
     ], AdminVagaPage);
     return AdminVagaPage;
+    var _a, _b, _c, _d, _e, _f;
 }());
 
 //# sourceMappingURL=admin-vaga.js.map
@@ -208,7 +233,7 @@ var CadastroPage = /** @class */ (function () {
             selector: 'page-cadastro',template:/*ion-inline-start:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/cadastro/cadastro.html"*/'<ion-header>\n\n  <ion-navbar color="primary">\n    \n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding class="auth-page">\n\n    <form class="list-form" (ngSubmit)="cadastrarUsuario()">\n        <ion-item>     \n          <ion-label stacked>Nome</ion-label>     \n          <ion-input type="text" [(ngModel)]="usuarioCadastro.nome" name="name" ></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>E-mail</ion-label>\n          <ion-input type="email" [(ngModel)]="usuarioCadastro.email" name="email" ></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>Senha</ion-label>\n          <ion-input type="password" [(ngModel)]="usuarioCadastro.senha" name="password" ></ion-input>\n        </ion-item>                \n        <button ion-button type="submit" block>Cadastrar</button>\n      </form>      \n      \n</ion-content>\n'/*ion-inline-end:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/cadastro/cadastro.html"*/,
             providers: [__WEBPACK_IMPORTED_MODULE_4__providers_usuario_usuario__["a" /* UsuarioProvider */]],
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_4__providers_usuario_usuario__["a" /* UsuarioProvider */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["a" /* AlertController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["l" /* ToastController */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["k" /* NavParams */], __WEBPACK_IMPORTED_MODULE_4__providers_usuario_usuario__["a" /* UsuarioProvider */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["a" /* AlertController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* ToastController */]])
     ], CadastroPage);
     return CadastroPage;
 }());
@@ -239,11 +264,11 @@ webpackEmptyAsyncContext.id = 182;
 
 var map = {
 	"../pages/admin-estac/admin-estac.module": [
-		727,
+		728,
 		4
 	],
 	"../pages/admin-vaga/admin-vaga.module": [
-		728,
+		727,
 		3
 	],
 	"../pages/cadastro/cadastro.module": [
@@ -251,11 +276,11 @@ var map = {
 		2
 	],
 	"../pages/estacionamento/estacionamento.module": [
-		730,
+		731,
 		1
 	],
 	"../pages/login/login.module": [
-		731,
+		730,
 		0
 	]
 };
@@ -436,11 +461,11 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_5_ionic_angular__["d" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_8__app_component__["a" /* MyApp */], {}, {
                     links: [
-                        { loadChildren: '../pages/admin-estac/admin-estac.module#AdminEstacPageModule', name: 'AdminEstacPage', segment: 'admin-estac', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/admin-vaga/admin-vaga.module#AdminVagaPageModule', name: 'AdminVagaPage', segment: 'admin-vaga', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/admin-estac/admin-estac.module#AdminEstacPageModule', name: 'AdminEstacPage', segment: 'admin-estac', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/cadastro/cadastro.module#CadastroPageModule', name: 'CadastroPage', segment: 'cadastro', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/estacionamento/estacionamento.module#EstacionamentoPageModule', name: 'EstacionamentoPage', segment: 'estacionamento', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] }
+                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/estacionamento/estacionamento.module#EstacionamentoPageModule', name: 'EstacionamentoPage', segment: 'estacionamento', priority: 'low', defaultHistory: [] }
                     ]
                 }),
                 __WEBPACK_IMPORTED_MODULE_6__angular_common_http__["b" /* HttpClientModule */],
@@ -660,6 +685,12 @@ var GoogleMapComponent = /** @class */ (function () {
                         map: map,
                         icon: childSnapshot.val().vaga == 0 ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
                     });
+                    var infowindow = new google.maps.InfoWindow({
+                        content: childSnapshot.val().nome + '<br>' + childSnapshot.val().endereco
+                    });
+                    marker.addListener('click', function () {
+                        infowindow.open(map, marker);
+                    });
                 });
             });
         })
@@ -675,9 +706,10 @@ var GoogleMapComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["m" /* Component */])({
             selector: 'google-map',template:/*ion-inline-start:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/components/google-map/google-map.html"*/'<div #map id="map"></div>'/*ion-inline-end:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/components/google-map/google-map.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__ionic_native_geolocation__["a" /* Geolocation */], __WEBPACK_IMPORTED_MODULE_0__angular_fire_database__["a" /* AngularFireDatabase */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__ionic_native_geolocation__["a" /* Geolocation */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ionic_native_geolocation__["a" /* Geolocation */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_fire_database__["a" /* AngularFireDatabase */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_fire_database__["a" /* AngularFireDatabase */]) === "function" && _b || Object])
     ], GoogleMapComponent);
     return GoogleMapComponent;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=google-map.js.map
@@ -770,15 +802,16 @@ var MyApp = /** @class */ (function () {
         });
     };
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_5__angular_core__["_8" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_6_ionic_angular__["h" /* Nav */]),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["h" /* Nav */])
+        Object(__WEBPACK_IMPORTED_MODULE_5__angular_core__["_8" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_6_ionic_angular__["i" /* Nav */]),
+        __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["i" /* Nav */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["i" /* Nav */]) === "function" && _a || Object)
     ], MyApp.prototype, "nav", void 0);
     MyApp = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_5__angular_core__["m" /* Component */])({template:/*ion-inline-start:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/app/app.html"*/'<ion-menu [content]="content">\n  <ion-header>\n    <ion-toolbar color="primary">\n      <ion-title>Menu</ion-title>\n    </ion-toolbar>\n  </ion-header>\n\n  <ion-content>\n    <ion-list>\n      <button menuClose ion-item (click)="HomePage()">\n        Home\n      </button>  \n      <button menuClose ion-item (click)="EstacionaPage()">\n        Tenho Estacionamento\n      </button>          \n      <button menuClose ion-item (click)="logout()">\n        <ion-icon ios="ios-exit" md="md-exit"></ion-icon>\n        Sair\n      </button>         \n    </ion-list>\n  </ion-content>\n\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>'/*ion-inline-end:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/app/app.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_6_ionic_angular__["k" /* Platform */], __WEBPACK_IMPORTED_MODULE_7__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_8__ionic_native_splash_screen__["a" /* SplashScreen */], __WEBPACK_IMPORTED_MODULE_10__providers_usuario_usuario__["a" /* UsuarioProvider */], __WEBPACK_IMPORTED_MODULE_1__angular_fire_auth__["a" /* AngularFireAuth */], __WEBPACK_IMPORTED_MODULE_0__angular_fire_database__["a" /* AngularFireDatabase */]])
+        __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["l" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["l" /* Platform */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_7__ionic_native_status_bar__["a" /* StatusBar */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__ionic_native_status_bar__["a" /* StatusBar */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_8__ionic_native_splash_screen__["a" /* SplashScreen */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_8__ionic_native_splash_screen__["a" /* SplashScreen */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_10__providers_usuario_usuario__["a" /* UsuarioProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_10__providers_usuario_usuario__["a" /* UsuarioProvider */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1__angular_fire_auth__["a" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_fire_auth__["a" /* AngularFireAuth */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_0__angular_fire_database__["a" /* AngularFireDatabase */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_fire_database__["a" /* AngularFireDatabase */]) === "function" && _g || Object])
     ], MyApp);
     return MyApp;
+    var _a, _b, _c, _d, _e, _f, _g;
 }());
 
 //# sourceMappingURL=app.component.js.map
@@ -823,6 +856,7 @@ var AdminEstacPage = /** @class */ (function () {
         this.firedb = firedb;
         this.alertCtrl = alertCtrl;
         this.modalCtrl = modalCtrl;
+        this.est = { nome: "", endereco: "" };
     }
     AdminEstacPage.prototype.ngOnInit = function () {
         this.initMap();
@@ -831,12 +865,14 @@ var AdminEstacPage = /** @class */ (function () {
         var lat;
         var lng;
         var vaga;
+        var est = { nome: "", endereco: "" };
         var user = this.fireauth.auth.currentUser;
         var ref = this.firedb.database.ref('estacionamentos/');
         ref.orderByChild('usuario').equalTo(user.uid).on('child_added', function (snapshot) {
             lat = snapshot.val().lat;
             lng = snapshot.val().lng;
             vaga = snapshot.val().vaga;
+            est = snapshot.val();
         });
         var coords = new google.maps.LatLng(lat, lng);
         var mapOptions = {
@@ -887,9 +923,12 @@ var AdminEstacPage = /** @class */ (function () {
             icon: vaga == 0 ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
             animation: google.maps.Animation.DROP
         });
+        this.est = est;
+        this.vaga = vaga;
     };
+    //modal para editar vagas e estacionamento
     AdminEstacPage.prototype.vagas = function () {
-        var vagaModal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_0__admin_vaga_admin_vaga__["a" /* AdminVagaPage */]);
+        var vagaModal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_0__admin_vaga_admin_vaga__["a" /* AdminVagaPage */], { nome: this.est.nome, endereco: this.est.endereco, vaga: this.vaga });
         vagaModal.present();
     };
     __decorate([
@@ -900,9 +939,10 @@ var AdminEstacPage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["m" /* Component */])({
             selector: 'page-admin-estac',template:/*ion-inline-start:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/admin-estac/admin-estac.html"*/'\n<ion-header>\n    <ion-navbar>\n      <button ion-button menuToggle>\n        <ion-icon name="menu"></ion-icon>\n      </button>    \n    </ion-navbar>\n  </ion-header>\n  \n  <ion-content padding>\n      <div #map id="map"></div>\n      <ion-fab bottom right>\n          <button ion-fab color="primary" (click)="vagas()">\n            <ion-icon name="add"></ion-icon>\n          </button>\n        </ion-fab>\n  </ion-content>\n  \n    '/*ion-inline-end:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/admin-estac/admin-estac.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__angular_fire_auth__["a" /* AngularFireAuth */], __WEBPACK_IMPORTED_MODULE_1__angular_fire_database__["a" /* AngularFireDatabase */], __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["a" /* AlertController */], __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["g" /* ModalController */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["j" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["j" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["k" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["k" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_fire_auth__["a" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_fire_auth__["a" /* AngularFireAuth */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__angular_fire_database__["a" /* AngularFireDatabase */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_fire_database__["a" /* AngularFireDatabase */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["a" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["a" /* AlertController */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["h" /* ModalController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["h" /* ModalController */]) === "function" && _f || Object])
     ], AdminEstacPage);
     return AdminEstacPage;
+    var _a, _b, _c, _d, _e, _f;
 }());
 
 //# sourceMappingURL=admin-estac.js.map
@@ -962,9 +1002,9 @@ var EstacionamentoPage = /** @class */ (function () {
     };
     EstacionamentoPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["m" /* Component */])({
-            selector: 'page-estacionamento',template:/*ion-inline-start:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/estacionamento/estacionamento.html"*/'\n<ion-header>\n\n  <ion-navbar color="primary">\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>    \n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding class="auth-page">  \n    <form class="list-form" (ngSubmit)="cadastraEstacionamento()">\n        <ion-item>     \n          <ion-label stacked>Nome</ion-label>     \n          <ion-input type="text" [(ngModel)]="parking.nome" name="nome" ></ion-input>\n        </ion-item>        \n        <ion-item>\n          <ion-label stacked>Endereço</ion-label>\n          <ion-input type="text" [(ngModel)]="parking.endereco" name="endereco" ></ion-input>\n        </ion-item>\n        <button ion-button type="submit" block>Cadastrar</button>\n      </form>      \n      \n</ion-content>\n'/*ion-inline-end:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/estacionamento/estacionamento.html"*/,
+            selector: 'page-estacionamento',template:/*ion-inline-start:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/estacionamento/estacionamento.html"*/'\n<ion-header>\n\n  <ion-navbar color="primary">\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>    \n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding class="auth-page">  \n    <form class="list-form" (ngSubmit)="cadastraEstacionamento()">\n        <ion-item>     \n          <ion-label stacked>Nome</ion-label>     \n          <ion-input type="text" [(ngModel)]="parking.nome" name="nome" placeholder="Ex: Estacionamento de fulano" required></ion-input>\n        </ion-item>        \n        <ion-item>\n          <ion-label stacked>Endereço</ion-label>\n          <ion-input type="text" [(ngModel)]="parking.endereco" name="endereco" placeholder="Ex: rua tal, 01, Madureira" required></ion-input>\n        </ion-item>\n        <button ion-button type="submit" block>Cadastrar</button>\n      </form>      \n      \n</ion-content>\n'/*ion-inline-end:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/estacionamento/estacionamento.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_3__providers_parking_parking__["a" /* ParkingProvider */], __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["l" /* ToastController */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["k" /* NavParams */], __WEBPACK_IMPORTED_MODULE_3__providers_parking_parking__["a" /* ParkingProvider */], __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["m" /* ToastController */]])
     ], EstacionamentoPage);
     return EstacionamentoPage;
 }());
@@ -1006,7 +1046,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Ionic pages and navigation.
  */
 var LoginPage = /** @class */ (function () {
-    function LoginPage(navCtrl, navParams, usuarioService, alertCtrl, menu, toastCtrl, fireauth) {
+    function LoginPage(navCtrl, navParams, usuarioService, alertCtrl, menu, toastCtrl, fireauth, loadingCtrl) {
         var _this = this;
         this.navCtrl = navCtrl;
         this.navParams = navParams;
@@ -1015,6 +1055,7 @@ var LoginPage = /** @class */ (function () {
         this.menu = menu;
         this.toastCtrl = toastCtrl;
         this.fireauth = fireauth;
+        this.loadingCtrl = loadingCtrl;
         this.menu.swipeEnable(false);
         this.fireauth.authState.subscribe(function (user) {
             if (!user) {
@@ -1026,6 +1067,7 @@ var LoginPage = /** @class */ (function () {
     }
     LoginPage.prototype.login = function () {
         var _this = this;
+        this.presentLoading();
         this.usuarioService.login(this.email.value, this.senha.value)
             .then(function () {
             _this.presentToast("Seja bem vindo " + _this.nome + "!");
@@ -1052,6 +1094,13 @@ var LoginPage = /** @class */ (function () {
         });
         toast.present();
     };
+    LoginPage.prototype.presentLoading = function () {
+        var loader = this.loadingCtrl.create({
+            content: "Entrando...",
+            dismissOnPageChange: true
+        });
+        loader.present();
+    };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_8" /* ViewChild */])('email'),
         __metadata("design:type", Object)
@@ -1064,15 +1113,10 @@ var LoginPage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-login',template:/*ion-inline-start:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/login/login.html"*/'\n<ion-content padding class="auth-page">    \n\n        <!-- Logo -->\n        <div padding-horizontal text-center class="animated fadeInDown">            \n          <img class="logo" src="assets/imgs/carro5.png">            \n          <h2 ion-text class="text-primary">\n            <strong>Estacione</strong> Aqui\n          </h2>\n        </div>\n\n  <form class="list-form" (ngSubmit)="login()" id="formlogin">    \n    <ion-item>\n      <ion-label floating>\n        <ion-icon name="mail" item-start class="text-primary"></ion-icon>\n        Email\n      </ion-label>\n      <ion-input type="email" name="email" #email></ion-input>\n    </ion-item>\n\n    <ion-item>\n      <ion-label floating>\n        <ion-icon name="lock" item-start class="text-primary"></ion-icon>\n        Senha\n      </ion-label>\n      <ion-input type="password" name="senha" #senha></ion-input>\n    </ion-item>  \n  </form>\n\n  <!-- <p text-right ion-text style="color:#2a76cc" tappable (click)="forgotPass()"><strong>Esqueceu a Senha?</strong></p> -->\n\n  <button ion-button type="submit" block form="formlogin"><ion-icon name="log-in"></ion-icon> Entrar</button>  \n\n  <div text-center margin-top>\n    <span ion-text color="primary" tappable (click)="cadastro()">Ou <strong>Cadastre-se aqui</strong></span>\n  </div>\n\n</ion-content>\n'/*ion-inline-end:"/var/www/html/aplicativo/EstacioneAqui/myApp/src/pages/login/login.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_2__providers_usuario_usuario__["a" /* UsuarioProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* MenuController */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* ToastController */],
-            __WEBPACK_IMPORTED_MODULE_5__angular_fire_auth__["a" /* AngularFireAuth */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__providers_usuario_usuario__["a" /* UsuarioProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_usuario_usuario__["a" /* UsuarioProvider */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* MenuController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* MenuController */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* ToastController */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_5__angular_fire_auth__["a" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__angular_fire_auth__["a" /* AngularFireAuth */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* LoadingController */]) === "function" && _h || Object])
     ], LoginPage);
     return LoginPage;
+    var _a, _b, _c, _d, _e, _f, _g, _h;
 }());
 
 //# sourceMappingURL=login.js.map

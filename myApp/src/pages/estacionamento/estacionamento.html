@@ -14,11 +14,11 @@
     <form class="list-form" (ngSubmit)="cadastraEstacionamento()">
         <ion-item>     
           <ion-label stacked>Nome</ion-label>     
-          <ion-input type="text" [(ngModel)]="parking.nome" name="nome" ></ion-input>
+          <ion-input type="text" [(ngModel)]="parking.nome" name="nome" placeholder="Ex: Estacionamento de fulano" required></ion-input>
         </ion-item>        
         <ion-item>
           <ion-label stacked>Endereço</ion-label>
-          <ion-input type="text" [(ngModel)]="parking.endereco" name="endereco" ></ion-input>
+          <ion-input type="text" [(ngModel)]="parking.endereco" name="endereco" placeholder="Ex: rua tal, 01, Madureira" required></ion-input>
         </ion-item>
         <button ion-button type="submit" block>Cadastrar</button>
       </form>      

@@ -20,6 +20,8 @@ export class AdminEstacPage {
 
   @ViewChild("map") mapEelement;
   public map: any;
+  public est = {nome: "", endereco: ""};
+  public vaga:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public fireauth: AngularFireAuth, public firedb: AngularFireDatabase, public alertCtrl: AlertController, public modalCtrl: ModalController) {
   }
@@ -32,6 +34,7 @@ export class AdminEstacPage {
     var lat;
     var lng;
     var vaga;
+    var est = {nome: "", endereco: ""};
     var user = this.fireauth.auth.currentUser;
 
     var ref = this.firedb.database.ref('estacionamentos/');    
@@ -39,6 +42,7 @@ export class AdminEstacPage {
       lat = snapshot.val().lat;
       lng = snapshot.val().lng;
       vaga = snapshot.val().vaga;
+      est = snapshot.val();
     })
       
       let coords = new google.maps.LatLng(lat,lng);      
@@ -91,10 +95,13 @@ export class AdminEstacPage {
       icon: vaga == 0 ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
       animation: google.maps.Animation.DROP
     });
-  }
 
+    this.est = est;
+    this.vaga = vaga;
+  }
+  //modal para editar vagas e estacionamento
   public vagas(){
-    let vagaModal = this.modalCtrl.create(AdminVagaPage);
+    let vagaModal = this.modalCtrl.create(AdminVagaPage, {nome :this.est.nome, endereco: this.est.endereco, vaga:this.vaga});
     vagaModal.present();
   }
 
